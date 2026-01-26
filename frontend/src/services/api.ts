@@ -1,80 +1,81 @@
-import axios from 'axios';
+import { products, categories, gallery, testimonials } from '../data/staticData';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-
-const api = axios.create({
-    baseURL: API_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
-});
-
-// Add a request interceptor to include the token in headers
-api.interceptors.request.use(
-    (config) => {
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        if (user && user.token) {
-            config.headers.Authorization = `Bearer ${user.token}`;
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
-    }
-);
-
+// Mock API for static hosting
 export const getProducts = async () => {
-    const response = await api.get('/products');
-    return response.data;
+    return products;
 };
 
 export const getProductBySlug = async (slug: string) => {
-    const response = await api.get(`/products/${slug}`);
-    return response.data;
+    return products.find(p => p.slug === slug);
 };
 
 export const createInquiry = async (inquiryData: any) => {
-    const response = await api.post('/inquiries', inquiryData);
-    return response.data;
+    console.log('Inquiry submitted (static mode):', inquiryData);
+    return { message: 'Inquiry received' };
 };
 
 export const getGallery = async () => {
-    const response = await api.get('/gallery');
-    return response.data;
+    const productItems = products.map(p => ({
+        _id: p.id,
+        title: p.name,
+        image: p.images[0],
+        category: typeof p.category === 'object' ? p.category.name : p.category,
+        location: 'Showroom',
+        year: '2024',
+        description: p.shortDescription
+    }));
+
+    const galleryItems = gallery.map(g => ({
+        _id: g.id,
+        title: g.title,
+        image: g.imageUrl,
+        category: g.category,
+        location: 'Project Location',
+        year: g.year,
+        description: g.description
+    }));
+
+    return [...productItems, ...galleryItems];
 };
 
 export const getTestimonials = async () => {
-    const response = await api.get('/testimonials');
-    return response.data;
+    return testimonials;
 };
 
 export const getCategories = async () => {
-    const response = await api.get('/categories');
-    return response.data;
+    return categories;
 };
 
 export const uploadImage = async (formData: FormData) => {
-    const response = await api.post('/upload', formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
-    });
-    return response.data; // Expected to return string path or object with path
+    console.log('Image upload (static mode)');
+    return { path: 'https://images.unsplash.com/photo-1543489822-c49534f3271f' };
 };
 
 export const createProduct = async (productData: any) => {
-    const response = await api.post('/products', productData);
-    return response.data;
+    console.log('Create product (static mode):', productData);
+    return productData;
 };
 
 export const updateProduct = async (id: string, productData: any) => {
-    const response = await api.put(`/products/${id}`, productData);
-    return response.data;
+    console.log('Update product (static mode):', id, productData);
+    return productData;
 };
 
 export const createGalleryItem = async (galleryData: any) => {
-    const response = await api.post('/gallery', galleryData);
-    return response.data;
+    console.log('Create gallery item (static mode):', galleryData);
+    return galleryData;
 };
 
-export default api;
+export default {
+    getProducts,
+    getProductBySlug,
+    createInquiry,
+    getGallery,
+    getTestimonials,
+    getCategories,
+    uploadImage,
+    createProduct,
+    updateProduct,
+    createGalleryItem
+};
+
