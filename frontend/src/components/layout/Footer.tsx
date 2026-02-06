@@ -16,10 +16,10 @@ const footerLinks = {
     { name: 'Repairs', path: '/services' },
   ],
   company: [
-    { name: 'About Us', path: '/' },
+    { name: 'About Us', path: '/about' },
     { name: 'Gallery', path: '/gallery' },
     { name: 'Contact', path: '/contact' },
-    { name: 'Privacy Policy', path: '/' },
+    { name: 'Privacy Policy', path: '/privacy-policy' },
   ],
 };
 
@@ -170,15 +170,13 @@ export const Footer = () => {
             © {new Date().getFullYear()} Smart Wellness. All rights reserved.
           </p>
           <div className="flex gap-8">
-            <Link to="/" className="text-cream/40 hover:text-gold text-sm transition-colors font-light hover:underline underline-offset-4 decoration-gold/50">
+            <Link to="/terms-and-conditions" className="text-cream/40 hover:text-gold text-sm transition-colors font-light hover:underline underline-offset-4 decoration-gold/50">
               Terms & Conditions
             </Link>
-            <Link to="/" className="text-cream/40 hover:text-gold text-sm transition-colors font-light hover:underline underline-offset-4 decoration-gold/50">
+            <Link to="/privacy-policy" className="text-cream/40 hover:text-gold text-sm transition-colors font-light hover:underline underline-offset-4 decoration-gold/50">
               Privacy Policy
             </Link>
-            <Link to="/" className="text-cream/40 hover:text-gold text-sm transition-colors font-light hover:underline underline-offset-4 decoration-gold/50">
-              Sitemap
-            </Link>
+
           </div>
         </div>
       </div>

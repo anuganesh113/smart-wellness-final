@@ -59,7 +59,7 @@ export const Navbar = () => {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`text-sm font-medium transition-colors relative group ${(isScrolled || !['/', '/custom-solutions', '/about', '/contact'].includes(location.pathname))
+                  className={`text-sm font-medium transition-colors relative group ${(isScrolled || !['/', '/custom-solutions', '/about', '/contact', '/privacy-policy', '/terms-and-conditions'].includes(location.pathname))
                     ? location.pathname === link.path
                       ? 'text-secondary font-semibold'
                       : 'text-secondary hover:text-secondary/80'
@@ -76,11 +76,11 @@ export const Navbar = () => {
             </div>
 
             <div className="hidden lg:flex items-center gap-4">
-              <a href="tel:+977-9851004505" className={`flex items-center gap-2 text-sm transition-colors ${(isScrolled || !['/', '/custom-solutions', '/about', '/contact'].includes(location.pathname)) ? 'text-secondary hover:text-secondary/80' : 'text-white hover:text-white/80'}`}>
+              <a href="tel:+977-9851004505" className={`flex items-center gap-2 text-sm transition-colors ${(isScrolled || !['/', '/custom-solutions', '/about', '/contact', '/privacy-policy', '/terms-and-conditions'].includes(location.pathname)) ? 'text-secondary hover:text-secondary/80' : 'text-white hover:text-white/80'}`}>
                 <Phone className="w-4 h-4" />
                 <span>+977-9851004505</span>
               </a>
-              <Button variant={(isScrolled || !['/', '/custom-solutions', '/about', '/contact'].includes(location.pathname)) ? 'gold' : 'hero'} size="sm" className="text-white" asChild>
+              <Button variant={(isScrolled || !['/', '/custom-solutions', '/about', '/contact', '/privacy-policy', '/terms-and-conditions'].includes(location.pathname)) ? 'gold' : 'hero'} size="sm" className="text-white" asChild>
                 <Link to="/contact">Get a Quote</Link>
               </Button>
             </div>
@@ -88,7 +88,7 @@ export const Navbar = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`lg:hidden p-2 rounded-lg transition-colors ${(isScrolled || !['/', '/custom-solutions', '/about', '/contact'].includes(location.pathname)) ? 'text-secondary hover:bg-muted' : 'text-white hover:bg-white/10'
+              className={`lg:hidden p-2 rounded-lg transition-colors ${(isScrolled || !['/', '/custom-solutions', '/about', '/contact', '/privacy-policy', '/terms-and-conditions'].includes(location.pathname)) ? 'text-secondary hover:bg-muted' : 'text-white hover:bg-white/10'
                 }`}
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
