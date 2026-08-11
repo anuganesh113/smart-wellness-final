@@ -50,6 +50,7 @@ const App = () => (
             <Route path="/admin/product/new" element={<AdminProductForm />} />
             <Route path="/admin/product/:id/edit" element={<AdminProductForm />} />
             <Route path="/admin/gallery/new" element={<AdminGalleryForm />} />
+            <Route path="/admin/gallery/:id/edit" element={<AdminGalleryForm />} />
           </Route>
         </Routes>
       </BrowserRouter>

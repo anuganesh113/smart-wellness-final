@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Inquiry = require('../models/inquiryModel');
+const sendEmail = require('../utils/sendEmail');
 
 // @desc    Create new inquiry
 // @route   POST /api/inquiries
@@ -16,6 +17,29 @@ const createInquiry = asyncHandler(async (req, res) => {
     });
 
     if (inquiry) {
+        // Send email notification locally
+        try {
+            const emailMessage = `
+                <h2>New Consultation Request</h2>
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Phone:</strong> ${phone}</p>
+                <p><strong>Project Type:</strong> ${productRef}</p>
+                <p><strong>Message:</strong></p>
+                <p>${message}</p>
+            `;
+
+            await sendEmail({
+                email: 'cbschandrashrestha@gmail.com',
+                subject: 'New Smart Wellness Inquiry',
+                html: emailMessage
+            });
+            console.log('Email notification sent');
+        } catch (error) {
+            console.error('Email send failed:', error);
+            // Don't fail the request if email fails, just log it
+        }
+
         res.status(201).json(inquiry);
     } else {
         res.status(400);

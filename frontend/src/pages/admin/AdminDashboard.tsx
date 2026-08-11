@@ -3,7 +3,7 @@ import { Layout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
 import { Product } from '@/types/product';
-import { getProducts, getGallery } from '@/services/api';
+import { getProducts, getGallery, deleteGalleryItem } from '@/services/api';
 import api from '@/services/api';
 import { Plus, Trash, Edit, Image as ImageIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -49,6 +49,18 @@ const AdminDashboard = () => {
         }
     };
 
+    const handleDeleteGalleryItem = async (id: string) => {
+        if (window.confirm('Are you sure you want to delete this gallery item?')) {
+            try {
+                await deleteGalleryItem(id);
+                setGalleryItems(galleryItems.filter((item) => item._id !== id));
+                toast({ title: 'Gallery Item Deleted' });
+            } catch (error) {
+                toast({ title: 'Error deleting gallery item', variant: 'destructive' });
+            }
+        }
+    };
+
     const handleLogout = () => {
         localStorage.removeItem('user');
         navigate('/admin/login');
@@ -81,6 +93,7 @@ const AdminDashboard = () => {
                                     <th className="px-6 py-4">Title</th>
                                     <th className="px-6 py-4">Category</th>
                                     <th className="px-6 py-4">Location</th>
+                                    <th className="px-6 py-4 text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-border">
@@ -94,11 +107,19 @@ const AdminDashboard = () => {
                                         <td className="px-6 py-4 font-medium">{item.title}</td>
                                         <td className="px-6 py-4">{item.category}</td>
                                         <td className="px-6 py-4 text-muted-foreground">{item.location || '-'}</td>
+                                        <td className="px-6 py-4 text-right space-x-2">
+                                            <Button size="sm" variant="ghost" asChild>
+                                                <Link to={`/admin/gallery/${item._id}/edit`}><Edit className="w-4 h-4" /></Link>
+                                            </Button>
+                                            <Button size="sm" variant="destructive" onClick={() => handleDeleteGalleryItem(item._id)}>
+                                                <Trash className="w-4 h-4" />
+                                            </Button>
+                                        </td>
                                     </tr>
                                 ))}
                                 {galleryItems.length === 0 && (
                                     <tr>
-                                        <td colSpan={4} className="px-6 py-8 text-center text-muted-foreground">
+                                        <td colSpan={5} className="px-6 py-8 text-center text-muted-foreground">
                                             No gallery items found. Add one to get started.
                                         </td>
                                     </tr>

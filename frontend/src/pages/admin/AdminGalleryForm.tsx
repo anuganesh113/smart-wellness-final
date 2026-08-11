@@ -1,17 +1,19 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Layout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
-import { createGalleryItem, uploadImage } from '@/services/api';
+import { createGalleryItem, uploadImage, getGalleryItemById, updateGalleryItem } from '@/services/api';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, Upload, Loader2, Save } from 'lucide-react';
 
 const categories = ['Residential', 'Commercial', 'Outdoor'];
 
 const AdminGalleryForm = () => {
+    const { id } = useParams();
     const navigate = useNavigate();
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
+    const isEditMode = !!id;
 
     // Form state
     const [formData, setFormData] = useState({
@@ -22,6 +24,31 @@ const AdminGalleryForm = () => {
         description: '',
         image: '',
     });
+
+    useEffect(() => {
+        if (isEditMode) {
+            fetchGalleryData();
+        }
+    }, [id]);
+
+    const fetchGalleryData = async () => {
+        try {
+            const data = await getGalleryItemById(id!);
+            setFormData({
+                title: data.title,
+                category: data.category,
+                location: data.location || '',
+                year: data.year || '2024',
+                description: data.description || '',
+                image: data.image || '',
+            });
+            if (data.image) {
+                setPreviewUrl(data.image);
+            }
+        } catch (error) {
+            toast({ title: 'Error fetching project details', variant: 'destructive' });
+        }
+    };
 
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -56,19 +83,26 @@ const AdminGalleryForm = () => {
                 return;
             }
 
-            // 2. Create Gallery Item
-            await createGalleryItem({
-                ...formData,
-                image: imageUrl,
-            });
-
-            toast({ title: 'Gallery Item Created Successfully' });
+            // 2. Create or Update Gallery Item
+            if (isEditMode) {
+                await updateGalleryItem(id!, {
+                    ...formData,
+                    image: imageUrl,
+                });
+                toast({ title: 'Gallery Item Updated Successfully' });
+            } else {
+                await createGalleryItem({
+                    ...formData,
+                    image: imageUrl,
+                });
+                toast({ title: 'Gallery Item Created Successfully' });
+            }
             navigate('/admin/dashboard');
 
         } catch (error: any) {
             console.error(error);
             toast({
-                title: 'Error creating item',
+                title: `Error ${isEditMode ? 'updating' : 'creating'} item`,
                 description: error.response?.data?.message || 'Something went wrong',
                 variant: 'destructive'
             });
@@ -86,8 +120,12 @@ const AdminGalleryForm = () => {
 
                 <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
                     <div className="p-6 border-b border-border bg-muted/20">
-                        <h1 className="text-2xl font-bold font-display">Add Gallery Item</h1>
-                        <p className="text-muted-foreground mt-1">Showcase a new project in your portfolio</p>
+                        <h1 className="text-2xl font-bold font-display">
+                            {isEditMode ? 'Edit Gallery Item' : 'Add Gallery Item'}
+                        </h1>
+                        <p className="text-muted-foreground mt-1">
+                            {isEditMode ? 'Modify details of your project' : 'Showcase a new project in your portfolio'}
+                        </p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="p-8 space-y-8">
@@ -205,7 +243,7 @@ const AdminGalleryForm = () => {
                                 {loading ? (
                                     <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Saving...</>
                                 ) : (
-                                    <><Save className="w-4 h-4 mr-2" /> Add Project</>
+                                    <><Save className="w-4 h-4 mr-2" /> {isEditMode ? 'Save Changes' : 'Add Project'}</>
                                 )}
                             </Button>
                         </div>

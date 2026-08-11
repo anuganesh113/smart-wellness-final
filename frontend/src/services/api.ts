@@ -77,4 +77,19 @@ export const createGalleryItem = async (galleryData: any) => {
     return response.data;
 };
 
+export const getGalleryItemById = async (id: string) => {
+    const response = await api.get(`/gallery/${id}`);
+    return response.data;
+};
+
+export const updateGalleryItem = async (id: string, galleryData: any) => {
+    const response = await api.put(`/gallery/${id}`, galleryData);
+    return response.data;
+};
+
+export const deleteGalleryItem = async (id: string) => {
+    const response = await api.delete(`/gallery/${id}`);
+    return response.data;
+};
+
 export default api;
