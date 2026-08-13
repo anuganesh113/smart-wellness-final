@@ -11,8 +11,8 @@ mongoose.connect(MONGO_URI)
         console.log('Connected to MongoDB');
         const Category = require('./models/categoryModel');
 
-        const result = await Category.deleteMany({ slug: { $in: ['sauna', 'jacuzzi'] } });
-        console.log(`Deleted ${result.deletedCount} categories (Sauna, Jacuzzi).`);
+        const result = await Category.deleteMany({ slug: { $in: ['saunas', 'jacuzzis', 'steam-rooms', 'accessories'] } });
+        console.log(`Deleted ${result.deletedCount} categories.`);
 
         process.exit(0);
     })

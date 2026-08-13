@@ -3,7 +3,7 @@ import { useRef, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { getProducts } from '@/services/api';
+import { getProducts, getImageUrl } from '@/services/api';
 import { Product } from '@/types/product';
 
 export const Products = () => {
@@ -98,7 +98,7 @@ export const Products = () => {
                 <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-muted mb-6 group-hover:shadow-2xl group-hover:shadow-black/5 transition-all duration-700">
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500 z-10" />
                   <img
-                    src={product.images[0]}
+                    src={getImageUrl(product.images[0])}
                     alt={product.name}
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   />

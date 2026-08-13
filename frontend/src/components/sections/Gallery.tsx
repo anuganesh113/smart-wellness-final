@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 
-import { getGallery } from '@/services/api';
+import { getGallery, getImageUrl } from '@/services/api';
 
 export const Gallery = () => {
   const [activeCategory, setActiveCategory] = useState('All');
@@ -106,7 +106,7 @@ export const Gallery = () => {
                 {/* Image Container */}
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-gray-100 shadow-md transition-all duration-500 group-hover:shadow-xl">
                   <img
-                    src={project.src}
+                    src={getImageUrl(project.src)}
                     alt={project.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 will-change-transform"
                   />
@@ -178,7 +178,7 @@ export const Gallery = () => {
               {/* Main Image */}
               <div className="relative w-full max-h-[80vh] lg:h-full lg:flex-1 flex items-center justify-center">
                 <img
-                  src={selectedProject.src}
+                  src={getImageUrl(selectedProject.src)}
                   alt={selectedProject.title}
                   className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
                 />

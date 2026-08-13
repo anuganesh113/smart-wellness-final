@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getProductBySlug, getProducts } from '@/services/api'; // Added getProducts
+import { getProductBySlug, getProducts, getImageUrl } from '@/services/api'; // Added getProducts
 import { Product } from '@/types/product';
 import { Layout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
@@ -336,7 +336,7 @@ const ProductDetails = () => {
                                     <div className="relative aspect-[3/4] bg-muted overflow-hidden rounded-sm mb-6">
                                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors z-10" />
                                         <img
-                                            src={related.images[0]}
+                                            src={getImageUrl(related.images[0])}
                                             alt={related.name}
                                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                         />

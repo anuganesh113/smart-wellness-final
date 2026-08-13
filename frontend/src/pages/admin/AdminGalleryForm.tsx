@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Layout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
-import { createGalleryItem, uploadImage, getGalleryItemById, updateGalleryItem } from '@/services/api';
+import { createGalleryItem, uploadImage, getGalleryItemById, updateGalleryItem, getImageUrl } from '@/services/api';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, Upload, Loader2, Save } from 'lucide-react';
 
@@ -136,7 +136,7 @@ const AdminGalleryForm = () => {
                             <div className={`relative aspect-video rounded-lg border-2 border-dashed border-border flex flex-col items-center justify-center transition-all bg-muted/30 ${!previewUrl ? 'hover:border-primary/50 hover:bg-muted/50' : ''}`}>
                                 {previewUrl ? (
                                     <>
-                                        <img src={previewUrl} alt="Preview" className="w-full h-full object-cover rounded-lg" />
+                                        <img src={getImageUrl(previewUrl)} alt="Preview" className="w-full h-full object-cover rounded-lg" />
                                         <button
                                             type="button"
                                             onClick={() => { setImageFile(null); setPreviewUrl(null); }}

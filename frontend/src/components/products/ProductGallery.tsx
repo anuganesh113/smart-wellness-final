@@ -2,6 +2,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence, useSpring, useMotionValue, useTransform } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Maximize2, X, ZoomIn } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { getImageUrl } from '@/services/api';
 import { Dialog, DialogContent, DialogClose } from '@/components/ui/dialog';
 
 interface ProductGalleryProps {
@@ -71,7 +72,7 @@ export const ProductGallery = ({ images, name, categoryName }: ProductGalleryPro
                     <motion.div
                         className="absolute inset-0 z-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                         style={{
-                            backgroundImage: `url(${images[activeIndex]})`,
+                            backgroundImage: `url(${getImageUrl(images[activeIndex])})`,
                             backgroundSize: '250%',
                             backgroundPosition: useTransform(
                                 [smoothX, smoothY],
@@ -84,7 +85,7 @@ export const ProductGallery = ({ images, name, categoryName }: ProductGalleryPro
                     <AnimatePresence mode="wait">
                         <motion.img
                             key={activeIndex}
-                            src={images[activeIndex]}
+                            src={getImageUrl(images[activeIndex])}
                             alt={`${name} - View ${activeIndex + 1}`}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: isHovering ? 0 : 1 }}
@@ -150,7 +151,7 @@ export const ProductGallery = ({ images, name, categoryName }: ProductGalleryPro
                                     : "opacity-40 hover:opacity-100 hover:scale-105"
                             )}
                         >
-                            <img src={img} alt={`${name} thumb ${index + 1}`} className="w-full h-full object-cover" />
+                            <img src={getImageUrl(img)} alt={`${name} thumb ${index + 1}`} className="w-full h-full object-cover" />
                             {activeIndex === index && (
                                 <motion.div
                                     layoutId="activeThumb"
@@ -203,7 +204,7 @@ export const ProductGallery = ({ images, name, categoryName }: ProductGalleryPro
                                     className="relative max-w-full max-h-full flex items-center justify-center"
                                 >
                                     <img
-                                        src={images[activeIndex]}
+                                        src={getImageUrl(images[activeIndex])}
                                         alt={name}
                                         className="max-w-[95vw] max-h-[80vh] object-contain shadow-[0_0_50px_rgba(212,175,55,0.15)] select-none"
                                         draggable={false}

@@ -55,7 +55,23 @@ const getInquiries = asyncHandler(async (req, res) => {
     res.json(inquiries);
 });
 
+// @desc    Delete an inquiry
+// @route   DELETE /api/inquiries/:id
+// @access  Private/Admin
+const deleteInquiry = asyncHandler(async (req, res) => {
+    const inquiry = await Inquiry.findById(req.params.id);
+
+    if (inquiry) {
+        await inquiry.deleteOne();
+        res.json({ message: 'Inquiry removed' });
+    } else {
+        res.status(404);
+        throw new Error('Inquiry not found');
+    }
+});
+
 module.exports = {
     createInquiry,
     getInquiries,
+    deleteInquiry,
 };

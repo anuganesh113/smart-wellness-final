@@ -4,7 +4,7 @@ import { Layout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { getCategories, getProductBySlug, uploadImage, createProduct, updateProduct } from '@/services/api';
+import { getCategories, getProductBySlug, uploadImage, createProduct, updateProduct, getImageUrl } from '@/services/api';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, Upload, X } from 'lucide-react';
 
@@ -219,7 +219,7 @@ const AdminProductForm = () => {
                             <div className="flex flex-wrap gap-4 mb-4">
                                 {formData.images.map((img, idx) => (
                                     <div key={idx} className="relative w-24 h-24 rounded-md overflow-hidden group">
-                                        <img src={img} alt="Product" className="w-full h-full object-cover" />
+                                        <img src={getImageUrl(img)} alt="Product" className="w-full h-full object-cover" />
                                         <button
                                             type="button"
                                             onClick={() => removeImage(idx)}

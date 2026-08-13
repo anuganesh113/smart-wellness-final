@@ -2,6 +2,16 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
+export const getImageUrl = (imagePath: string) => {
+    if (!imagePath) return '';
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://') || imagePath.startsWith('data:') || imagePath.startsWith('blob:')) {
+        return imagePath;
+    }
+    const baseUrl = API_URL.replace('/api', '');
+    const cleanPath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+    return `${baseUrl}${cleanPath}`;
+};
+
 const api = axios.create({
     baseURL: API_URL,
     headers: {
@@ -89,6 +99,26 @@ export const updateGalleryItem = async (id: string, galleryData: any) => {
 
 export const deleteGalleryItem = async (id: string) => {
     const response = await api.delete(`/gallery/${id}`);
+    return response.data;
+};
+
+export const getInquiries = async () => {
+    const response = await api.get('/inquiries');
+    return response.data;
+};
+
+export const deleteInquiry = async (id: string) => {
+    const response = await api.delete(`/inquiries/${id}`);
+    return response.data;
+};
+
+export const createCategory = async (categoryData: any) => {
+    const response = await api.post('/categories', categoryData);
+    return response.data;
+};
+
+export const deleteCategory = async (id: string) => {
+    const response = await api.delete(`/categories/${id}`);
     return response.data;
 };
 

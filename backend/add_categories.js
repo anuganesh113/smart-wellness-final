@@ -7,8 +7,9 @@ dotenv.config({ path: path.join(__dirname, '.env') });
 const MONGO_URI = process.env.MONGO_URI;
 
 const categoriesToAdd = [
-    { name: 'Sauna', slug: 'sauna' },
-    { name: 'Jacuzzi', slug: 'jacuzzi' },
+    { name: 'Saunas', slug: 'saunas' },
+    { name: 'Steam Rooms', slug: 'steam-rooms' },
+    { name: 'Jacuzzis', slug: 'jacuzzis' },
     { name: 'Accessories', slug: 'accessories' }
 ];
 

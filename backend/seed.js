@@ -1,11 +1,11 @@
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import colors from 'colors';
-import bcrypt from 'bcryptjs';
-import User from './models/userModel.js';
-import Product from './models/productModel.js';
-import Category from './models/categoryModel.js';
-import connectDB from './config/db.js';
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const colors = require('colors');
+const bcrypt = require('bcryptjs');
+const User = require('./models/userModel');
+const Product = require('./models/productModel');
+const Category = require('./models/categoryModel');
+const connectDB = require('./config/db');
 
 dotenv.config();
 
@@ -18,9 +18,6 @@ const importData = async () => {
         await Category.deleteMany();
 
         // Create Admin User
-        // const salt = await bcrypt.genSalt(10);
-        // const hashedPassword = await bcrypt.hash('123456', salt);
-
         const adminUser = await User.create({
             username: 'admin',
             password: '123456', // Pass plain text, model handles hashing
@@ -34,6 +31,7 @@ const importData = async () => {
             { name: 'Saunas', slug: 'saunas', description: 'Traditional and Infrared Saunas' },
             { name: 'Steam Rooms', slug: 'steam-rooms', description: 'Luxury Steam Rooms' },
             { name: 'Jacuzzis', slug: 'jacuzzis', description: 'Relaxing Jacuzzis' },
+            { name: 'Accessories', slug: 'accessories', description: 'Wellness Accessories' }
         ]);
 
         console.log('Categories Imported!'.green.inverse);
