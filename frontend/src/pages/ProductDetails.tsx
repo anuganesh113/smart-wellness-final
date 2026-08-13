@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getProductBySlug, getProducts, getImageUrl } from '@/services/api'; // Added getProducts
 import { Product } from '@/types/product';
 import { Layout } from '@/components/layout';
@@ -14,6 +14,7 @@ const iconMap: Record<string, any> = {
 };
 
 const ProductDetails = () => {
+    const navigate = useNavigate();
     const { slug } = useParams<{ slug: string }>();
     const [product, setProduct] = useState<Product | null>(null);
     const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
@@ -332,23 +333,71 @@ const ProductDetails = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {relatedProducts.map((related, index) => (
-                                <Link to={`/products/${related.slug}`} key={related._id || index} className="group block">
-                                    <div className="relative aspect-[3/4] bg-muted overflow-hidden rounded-sm mb-6">
-                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors z-10" />
+                                <div
+                                    key={related._id || index}
+                                    className="group cursor-pointer"
+                                    onClick={() => navigate(`/products/${related.slug}`)}
+                                >
+                                    {/* Image Container */}
+                                    <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-muted mb-6 group-hover:shadow-2xl group-hover:shadow-black/5 transition-all duration-700">
+                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500 z-10" />
                                         <img
                                             src={getImageUrl(related.images[0])}
                                             alt={related.name}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                                         />
-                                        <div className="absolute bottom-4 right-4 z-20 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                                            <div className="bg-white p-3 rounded-full shadow-lg text-charcoal">
-                                                <ArrowRight className="w-4 h-4" />
+
+                                        {/* Floating Action */}
+                                        <div className="absolute bottom-6 right-6 z-20 translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                                            <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-charcoal shadow-lg hover:scale-110 transition-transform">
+                                                <ArrowRight className="w-5 h-5" />
                                             </div>
                                         </div>
+
+                                        {/* Category Tag */}
+                                        <div className="absolute top-6 left-6 z-20">
+                                            <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium uppercase tracking-wider text-charcoal rounded-sm border border-white/20">
+                                                {related.category?.name || 'Product'}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <h3 className="font-display text-xl font-medium text-foreground mb-1 group-hover:text-gold transition-colors">{related.name}</h3>
-                                    <p className="text-muted-foreground font-light text-sm">NPR. {related.price.toLocaleString()}</p>
-                                </Link>
+
+                                    {/* Content */}
+                                    <div className="space-y-3 group-hover:translate-x-2 transition-transform duration-500">
+                                        <div className="flex justify-between items-start border-b border-border/40 pb-4 mb-4 relative">
+                                            <div className="max-w-[65%]">
+                                                <h3 className="font-display text-2xl font-semibold text-foreground leading-tight group-hover:text-active transition-colors">
+                                                    {related.name}
+                                                </h3>
+                                            </div>
+                                            <div className="flex flex-col items-end">
+                                                <span className="font-body text-lg font-medium text-gold transition-colors duration-300">
+                                                    NPR. {related.price.toLocaleString()}
+                                                </span>
+                                            </div>
+                                            {/* Animated Line */}
+                                            <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-gold group-hover:w-full transition-all duration-700" />
+                                        </div>
+
+                                        <p className="text-muted-foreground font-light line-clamp-2 leading-relaxed">
+                                            {related.shortDescription}
+                                        </p>
+
+                                        {related.features && (
+                                            <div className="flex flex-wrap gap-2 pt-3 border-t border-border/30 mt-4">
+                                                {related.features.slice(0, 3).map((feature) => (
+                                                    <span
+                                                        key={feature}
+                                                        className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] uppercase tracking-wider font-medium text-white/90 bg-charcoal rounded-full border border-white/10 group-hover:border-gold/30 group-hover:text-gold transition-all duration-500"
+                                                    >
+                                                        <span className="w-1 h-1 rounded-full bg-gold transition-colors" />
+                                                        {feature}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                             ))}
                         </div>
                     </div>
